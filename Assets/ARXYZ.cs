@@ -9,7 +9,7 @@ public class ARXYZ : MonoBehaviour
     public float _angle1 = 0.0f;
     private int _retourne = 0;
     private float _initialY = 0.0f;
-    public int clickcount;
+    static public int clickcount=0;
     public int score = 0;
     //Appel du gameplay manager
     private GameplayManager gameplayManager;
@@ -23,7 +23,7 @@ public class ARXYZ : MonoBehaviour
     void Start()
     {
         _initialY = this.transform.localPosition.y;
-        clickcount = 0;
+        
         _angle1 = this.transform.localRotation.eulerAngles.x;
 
     }
@@ -44,49 +44,62 @@ public class ARXYZ : MonoBehaviour
 
     public void Tourner()
     {
-        if (this._angle1==0.0f)
+        if (this._angle1 == 0.0f)
+        {
             _retourne = 1;
+            gameplayManager.UpdateScore(-1, clickcount);
+        }
+            
         if (this._angle1 == 180.0f)
+        {
             _retourne = -1;
+            gameplayManager.UpdateScore(1, clickcount);
+        }
+            
 
+
+    }
+
+    void Update()
+    {
 
         if (_retourne != 0)
         {
-            //float deltaAngle = _speed1 * Time.deltaTime * _retourne;
-           // _angle1 += deltaAngle;
+            float deltaAngle = _speed1 * Time.deltaTime * _retourne;
+            _angle1 += deltaAngle;
             if (_retourne > 0)
             {
                 if (_angle1 >= 180.0f)
                 {
                     _angle1 = 180.0f;
                     _retourne = 0;
-                    score = -1;
+                   // score = -1;
                 }
             }
-            else if (_angle1 <= 0.0f)
+            else 
             {
                 if (_angle1 <= 0.0f)
                 {
                     _angle1 = 0.0f;
                     _retourne = 0;
-                    score = 1;
+                   // score = 1;
                 }
             }
-            //Vector3 pos = this.transform.localPosition;
-           // pos.y = _initialY + (90.0f - Math.Abs(_angle1 - 90.0f)) / 90.0f * 10.0f;
-            //this.transform.localPosition = pos;
+            Vector3 pos = this.transform.localPosition;
+            pos.y = _initialY + (90.0f - Math.Abs(_angle1 - 90.0f)) / 90.0f * 10.0f;
+            this.transform.localPosition = pos;
             this.transform.localRotation = Quaternion.Euler(_angle1, 0.0f, 0.0f);
-            gameplayManager.UpdateScore(score,clickcount);
+            
         }
     }
 
-
-
     void OnMouseDown()
     {
+        Debug.Log(_angle1);
+
         int check = 0;
-        _angle1 = this.transform.localRotation.eulerAngles.x;
-        _initialY = this.transform.localPosition.y;
+        //_angle1 = this.transform.localRotation.eulerAngles.x;
+        //_initialY = this.transform.localPosition.y;
         if ((this._angle1 == 90.0f) && ((clickcount % 2) == 0))
          {
              this.SetNoir();
@@ -110,7 +123,7 @@ public class ARXYZ : MonoBehaviour
             check = 1;
         }*/
        // Debug.Log( clickcount);
-         if ((this._angle1 != 90.0f) && (check ==0)) 
+         if (this._angle1!=90   && check ==0) 
   {
       this.Tourner();
   }

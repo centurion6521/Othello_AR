@@ -13,7 +13,14 @@ public class GameplayManager : MonoBehaviour
     {
         currentScore += score;
         GMCC += clickcount;
+        //Debug.Log(clickcount);
         Scoretext.text = "Score: " + currentScore.ToString();
+        if (clickcount == 59)
+        {
+            if (currentScore < 0) { Scoretext.text = "Victoire des Noirs "; }
+            if (currentScore > 0) { Scoretext.text = "Victoire des Blancs "; }
+            if (currentScore == 0) { Scoretext.text = "Egalite "; }
+        }
       // Scoretext.text = "Manche: " + GMCC.ToString();
     }
 }
